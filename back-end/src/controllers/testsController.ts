@@ -1,8 +1,8 @@
 import { Request, Response } from 'express'
-import { recommendationService } from '../services/recommendationsService.js'
+import { testService } from '../services/testService.js'
 
 export async function deleteAll(req: Request, res: Response) {
-	await recommendationService.deleteAll()
+	await testService.deleteAll()
 
 	res.sendStatus(200)
 }

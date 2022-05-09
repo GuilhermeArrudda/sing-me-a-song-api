@@ -70,4 +70,16 @@ describe('testing recommendations services', () => {
 			await recommendationService.getById(null)
 		}).rejects.toEqual(notFoundError)
 	})
+	
+	it('should return gt if value is lower than 0.7', async () => {
+		const result = recommendationService.getScoreFilter(0.69)
+
+		expect(result).toBe('gt')
+	})
+
+	it('should return lte if value is higher than 0.7', async () => {
+		const result = recommendationService.getScoreFilter(0.71)
+
+		expect(result).toBe('lte')
+	})
 })
