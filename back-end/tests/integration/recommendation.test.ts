@@ -1,7 +1,7 @@
 import supertest from 'supertest'
 import app from '../../src/app.js'
 import { prisma } from '../../src/database.js'
-import { bodyFactory, recommendationFactory } from '../factories/recommendationFactory.js'
+import { bodyFactory, manyRecommendationsFactory, randomRecommendationsFactory, recommendationFactory } from '../factories/recommendationFactory.js'
 
 const agent = supertest(app)
 
@@ -65,6 +65,47 @@ describe('testing recommendations', () => {
 		})
 		expect(status).toEqual(200)
 		expect(counterAfter.score - counterBefore.score).toEqual(-1)
+	})
+
+	it('should return statusCode 200 and random recommendation', async () => {
+		await randomRecommendationsFactory()
+
+		const result = await agent.get('/recommendations/random')
+		const status = result.status
+
+		expect(status).toEqual(200)
+		expect(result.body).not.toBe(null)
+	})
+
+	it('should return statusCode 200 and top 10 recommendations', async () => {
+		await manyRecommendationsFactory()
+
+		const result = await agent.get('/recommendations')
+		const status = result.status
+
+		expect(status).toEqual(200)
+		expect(result.body.length).toEqual(10)
+	})
+
+	it('should return statusCode 200 and recommendation find by id', async () => {
+		const recommendation = await recommendationFactory()
+
+		const result = await agent.get(`/recommendations/${recommendation.id}`)
+		const status= result.status
+
+		expect(status).toEqual(200)
+		expect(result.body.id).toEqual(recommendation.id)
+	})
+
+	it('should return statusCode 200 and better recommendations', async () => {
+		await randomRecommendationsFactory()
+		const amount = 4
+
+		const result = await agent.get(`/recommendations/top/${amount}`)
+		const status = result.status
+
+		expect(status).toEqual(200)
+		expect(result.body.length).toEqual(amount)
 	})
 })
 
