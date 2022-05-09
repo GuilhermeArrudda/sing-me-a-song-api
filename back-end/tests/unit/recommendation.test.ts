@@ -82,4 +82,12 @@ describe('testing recommendations services', () => {
 
 		expect(result).toBe('lte')
 	})
+
+	it('should delete table recommendation', async () => {
+		const truncate = jest.spyOn(recommendationRepository, 'truncate')
+
+		await recommendationService.deleteAll()
+
+		expect(truncate).toBeCalledTimes(1)
+	})
 })
