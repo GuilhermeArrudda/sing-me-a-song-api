@@ -97,3 +97,14 @@ export async function manyRecommendationsFactory() {
 		]
 	})
 }
+
+export function recommendationDataFactory() {
+	const data = {
+		id: 1,
+		name: 'Marilia Mendonça - Troca de Calçada',
+		youtubeLink: 'https://www.youtube.com/watch?v=WkYqQctOi9g',
+		score: 1
+	}
+
+	return data
+}
